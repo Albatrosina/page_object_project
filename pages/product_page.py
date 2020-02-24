@@ -16,8 +16,12 @@ class ProductPage(BasePage):
 
     def product_name_added_should_be_correct(self):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text == self.browser.find_element(
-           *ProductPageLocators.BASKET_CONFIRMATION_MSG
+           *ProductPageLocators.SUCCESS_MSG
         ).text, "Product name in the notification isn't fit the product name added"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MSG), \
+            "Success message is presented, but should not be"
 
 
 
