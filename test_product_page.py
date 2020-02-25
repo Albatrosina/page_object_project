@@ -1,6 +1,7 @@
 from .pages.product_page import ProductPage
 import pytest
 
+"""
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
@@ -18,7 +19,43 @@ def test_guest_can_add_product_to_basket(browser, link):
     product_page.open()
     # добавляем продукт в корзину
     product_page.add_product_to_basket()
+    # решение задачи на получение скидки
+    product_page.solve_quiz_and_get_code()
     # проверка того, что общая стоимость - соответствует стоимости добавленного продукта
     product_page.basket_total_should_be_equal_to_product_price()
     # проверка того, что название купленного товара - соответствует названию в нотифе
     product_page.product_name_added_should_be_correct()
+"""
+
+
+link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+
+
+@pytest.mark.xfail(reason="Success message is present right after adding the product to basket")
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    product_page = ProductPage(browser, link)
+    # 1.Открываем страницу товара
+    product_page.open()
+    # 2.Добавляем товар в корзину
+    product_page.add_product_to_basket()
+    # 3.Проверяем, что нет сообщения об успехе
+    product_page.should_not_be_success_message()
+
+
+def test_guest_cant_see_success_message(browser):
+    product_page = ProductPage(browser, link)
+    # 1.Открываем страницу товара
+    product_page.open()
+    # 2.Проверяем, что нет сообщения об успехе
+    product_page.guest_should_not_see_success_msg()
+
+
+@pytest.mark.xfail(reason="Success msg isn't disappear until user didn't close it")
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    product_page = ProductPage(browser, link)
+    # 1. Открываем страницу товара
+    product_page.open()
+    # 2. Добавляем товар в корзину
+    product_page.add_product_to_basket()
+    # 3. Проверяем, что нет сообщения об успехе
+    product_page.message_should_disappear_after_adding_product_to_basket()
