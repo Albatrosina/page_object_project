@@ -22,3 +22,10 @@ class ProductPageLocators():
     BASKET_TOTAL = (By.CSS_SELECTOR, "#messages > div.alert.alert-safe.alert-noicon.alert-info.fade.in > div > p:nth-child(1) > strong")
     PRODUCT_PRICE = (By.CSS_SELECTOR, "#content_inner > article > div.row > div.col-sm-6.product_main > p.price_color")
     PRODUCT_NAME = (By.CSS_SELECTOR, "#content_inner > article > div.row > div.col-sm-6.product_main > h1")
+
+
+class BasketPageLocators():
+    BASKET_PAGE_STATUS = (By.CSS_SELECTOR, "#content_inner > p")
+    BASKET_PAGE_LINK = (By.XPATH,
+                        '//*[@id="default"]/header/div[1]/div/div[2]/span/a')
+    BASKET_ITEMS = (By.CSS_SELECTOR, "#basket_formset > div")
