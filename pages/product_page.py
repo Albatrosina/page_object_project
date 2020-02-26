@@ -8,7 +8,6 @@ class ProductPage(BasePage):
     def add_product_to_basket(self):
         add_to_basket_btn = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET)
         add_to_basket_btn.click()
-        #self.solve_quiz_and_get_code()
 
     def basket_total_should_be_equal_to_product_price(self):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text == self.browser.find_element(
