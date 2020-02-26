@@ -1,6 +1,5 @@
 from .base_page import BasePage
 from .locators import LoginPageLocators
-from faker import Faker
 
 
 class LoginPage(BasePage):
@@ -25,11 +24,4 @@ class LoginPage(BasePage):
         assert self.is_element_present(*LoginPageLocators.REGISTER_FORM_ID), \
             "Register form isn't present on this page"
 
-    def generate_fake_email(self):
-        f = Faker()
-        return f.email()
-
-    def generate_fake_password(self):
-        f = Faker()
-        return f.password()
 

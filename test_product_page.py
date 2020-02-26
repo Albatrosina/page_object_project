@@ -4,6 +4,32 @@ from .pages.login_page import LoginPage
 import pytest
 
 
+@pytest.mark.need_review
+@pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
+                                  pytest.param("http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7", marks=pytest.mark.xfail),
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
+                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9",])
+def test_guest_can_add_product_to_basket(browser, link):
+    # создаём экземпляр класса ProductPage
+    product_page = ProductPage(browser, link)
+    # открываем страницу
+    product_page.open()
+    # добавляем продукт в корзину
+    product_page.add_product_to_basket()
+    # решение задачи на получение скидки
+    product_page.solve_quiz_and_get_code()
+    # проверка того, что общая стоимость - соответствует стоимости добавленного продукта
+    product_page.basket_total_should_be_equal_to_product_price()
+    # проверка того, что название купленного товара - соответствует названию в нотифе
+    product_page.product_name_added_should_be_correct()
+
+
 @pytest.mark.skip
 @pytest.mark.xfail(reason="Success message is present right after adding the product to basket")
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
@@ -37,6 +63,7 @@ def test_guest_should_see_login_link_on_product_page(browser):
     page.should_be_login_link()
 
 
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
@@ -44,6 +71,7 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     page.go_to_login_page()
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = BasketPage(browser, link)
@@ -61,14 +89,15 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
 class TestUserAddToBasketFromProductPage:
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
-        self.link = "http://selenium1py.pythonanywhere.com/accounts/login/"
-        page = LoginPage(browser, self.link)
+        link = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        page = LoginPage(browser, link)
         page.open()
         email = page.generate_fake_email()
         password = page.generate_fake_password()
         page.register_new_user(email, password)
         page.should_be_authorized_user()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
         # создаём экземпляр класса ProductPage
@@ -77,14 +106,10 @@ class TestUserAddToBasketFromProductPage:
         product_page.open()
         # добавляем продукт в корзину
         product_page.add_product_to_basket()
-        try:
-            # решение задачи на получение скидки
-            product_page.solve_quiz_and_get_code()
-        except:
-            # проверка того, что общая стоимость - соответствует стоимости добавленного продукта
-            product_page.basket_total_should_be_equal_to_product_price()
-            # проверка того, что название купленного товара - соответствует названию в нотифе
-            product_page.product_name_added_should_be_correct()
+        # проверка того, что общая стоимость - соответствует стоимости добавленного продукта
+        product_page.basket_total_should_be_equal_to_product_price()
+        # проверка того, что название купленного товара - соответствует названию в нотифе
+        product_page.product_name_added_should_be_correct()
 
     def test_user_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"

@@ -3,9 +3,10 @@ from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from faker import Faker
+import math
 from.locators import BasePageLocators
 from.locators import BasketPageLocators
-import math
 
 
 class BasePage():
@@ -69,3 +70,11 @@ class BasePage():
     def should_be_authorized_user(self):
         assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
                                                                      " probably unauthorised user"
+
+    def generate_fake_email(self):
+        f = Faker()
+        return f.email()
+
+    def generate_fake_password(self):
+        f = Faker()
+        return f.password()
